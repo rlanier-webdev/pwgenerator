@@ -1,21 +1,20 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"math/rand"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
-	MinLength        = 15 // Minimum length of the password
+	MinLength = 15 // Minimum length of the password
 )
 
 // getSeed initializes a new random number generator with a seed based on the current time
 func getSeed() *rand.Rand {
-	seed := time.Now().UnixNano()
-	source := rand.NewSource(seed)
-	generator := rand.New(source)
-	return generator
+	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
 // Function to check if a character is a letter
@@ -38,14 +37,14 @@ func getPassword(alphabet, numbers, symbols string) string {
 	generator := getSeed()
 
 	password := make([]rune, MinLength) // Create rune array for password
-	encounteredLetter := false           // Flag to track if a letter has been encountered yet
+	encounteredLetter := false          // Flag to track if a letter has been encountered yet
 
 	for i := range password {
 		index := generator.Intn(len(temp))
 		char := rune(temp[index])
 
 		// Check if the selected character is a letter
-		if isLetter(char) && !encounteredLetter{
+		if isLetter(char) && !encounteredLetter {
 			// Convert the letter to uppercase
 			char = toUpper(char)
 			encounteredLetter = true
@@ -56,14 +55,22 @@ func getPassword(alphabet, numbers, symbols string) string {
 	return string(password)
 }
 
-func main() {
-	// Code
-	var (
-		alphabet string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		numbers  string = "0123456789"
-		symbols  string = "!@#$%^&*()_+-=[]{}|;:,.<>?/~"
-	)
+func generatePassword() string {
+	alphabet := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	numbers := "0123456789"
+	symbols := "!@#$%^&*()_+-=[]{}|;:,.<>?/~"
+	return getPassword(alphabet, numbers, symbols)
+}
 
-	password := getPassword(alphabet, numbers, symbols)
-	fmt.Println(password)
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+
+	r.Static("/static", "./static")
+	// Route to serve the initial page
+	r.GET("/", PageHandler)
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Failed to run server: ", err)
+	}
 }
