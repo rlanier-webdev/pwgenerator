@@ -1,0 +1,30 @@
+body {
+     background-color: #131313;
+     color: white;
+     padding: 25vh 0;
+}
+.container {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+     justify-content: center;
+     align-items: center;
+}
+input {
+     background: white;
+     padding: 10px;
+     border-radius: 5px;
+     border: none;
+     text-align: center;
+}
+
+button {
+     padding: 10px;
+     border: none;
+     border-radius: 5px;
+     background: blue;
+     color: white;
+}
+button:hover {
+     background: rgb(3, 3, 236);
+}
