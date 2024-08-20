@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"os"
 	"time"
 
 	"math/rand"
@@ -67,7 +67,9 @@ func main() {
 	// New API route
 	r.GET("/api/password", PasswordAPIHandler)
 
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal("Failed to run server: ", err)
+	// Get the port from the environment variable
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default to port 8080 if PORT environment variable is not set
 	}
 }
