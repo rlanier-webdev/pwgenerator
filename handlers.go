@@ -15,3 +15,13 @@ func PageHandler(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "index.html", data)
 }
+
+// New API handler function
+func PasswordAPIHandler(c *gin.Context) {
+	password := generatePassword()
+
+	// Return the generated password as JSON
+	c.JSON(http.StatusOK, gin.H{
+		"password": password,
+	})
+}
