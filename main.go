@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -71,5 +73,10 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // Default to port 8080 if PORT environment variable is not set
+	}
+
+	log.Printf("Starting server on :%s\n", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatalf("could not start server: %s\n", err.Error())
 	}
 }
