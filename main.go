@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
-	"os"
 	"time"
 
 	"math/rand"
@@ -60,6 +58,7 @@ func generatePassword() string {
 }
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
 
@@ -69,14 +68,7 @@ func main() {
 	// New API route
 	r.GET("/api/password", PasswordAPIHandler)
 
-	// Get the port from the environment variable
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080" // Default to port 8080 if PORT environment variable is not set
-	}
-
-	log.Printf("Starting server on :%s\n", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatalf("could not start server: %s\n", err.Error())
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Failed to run server: ", err)
 	}
 }
